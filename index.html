@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>The Elite Brew — Check-in</title>
+
+
+<!-- QR SCANNER -->
+
+<script
+  src="https://unpkg.com/html5-qrcode"
+  type="text/javascript">
+</script>
+
+
+<style>
+
+:root {
+  --elite-green: #d5fa0d;
+  --elite-black: #000000;
+  --panel-black: #080808;
+  --panel-soft: #111111;
+  --muted-text: #a7a7a7;
+  --line-soft: rgba(213,250,13,.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+
+  margin: 0;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(213,250,13,.16),
+      transparent 34%
+    ),
+    var(--elite-black);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    20px;
+
+  color:
+    white;
+
+}
+
+
+.app {
+
+  width:
+    100%;
+
+  max-width:
+    430px;
+
+}
+
+
+.card {
+
+  background:
+    linear-gradient(
+      180deg,
+      #101010 0%,
+      #050505 100%
+    );
+
+  border:
+    1px solid
+    var(--line-soft);
+
+  border-radius:
+    18px;
+
+  padding:
+    28px;
+
+  box-shadow:
+    0 0 0 1px
+    rgba(255,255,255,.04),
+    0 22px 70px
+    rgba(0,0,0,.72),
+    0 0 42px
+    rgba(213,250,13,.12);
+
+}
+
+
+.header {
+
+  text-align:
+    center;
+
+  margin-bottom:
+    25px;
+
+}
+
+
+.logo-text {
+
+  font-size:
+    11px;
+
+  letter-spacing:
+    5px;
+
+  color:
+    var(--elite-green);
+
+  font-weight:
+    bold;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+h1 {
+
+  margin:
+    8px 0 5px;
+
+  font-size:
+    34px;
+
+  color:
+    var(--elite-green);
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0;
+
+}
+
+
+.subtitle {
+
+  color:
+    var(--muted-text);
+
+  font-size:
+    14px;
+
+}
+
+
+input {
+
+  width:
+    100%;
+
+  padding:
+    15px;
+
+  border:
+    1px solid
+    rgba(213,250,13,.28);
+
+  border-radius:
+    10px;
+
+  font-size:
+    16px;
+
+  outline:
+    none;
+
+  background:
+    #030303;
+
+  color:
+    white;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(255,255,255,.04);
+
+}
+
+input::placeholder {
+
+  color:
+    #6f6f6f;
+
+}
+
+
+input:focus {
+
+  border-color:
+    var(--elite-green);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(213,250,13,.14);
+
+}
+
+.password-field {
+
+  position:
+    relative;
+
+}
+
+.password-field input {
+
+  padding-right:
+    54px;
+
+}
+
+.password-toggle {
+
+  position:
+    absolute;
+
+  top:
+    50%;
+
+  right:
+    8px;
+
+  width:
+    40px;
+
+  height:
+    40px;
+
+  margin:
+    0;
+
+  padding:
+    0;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border:
+    1px solid
+    rgba(213,250,13,.26);
+
+  border-radius:
+    8px;
+
+  background:
+    rgba(213,250,13,.08);
+
+  color:
+    var(--elite-green);
+
+  transform:
+    translateY(-50%);
+
+}
+
+.password-toggle:hover:not(:disabled) {
+
+  transform:
+    translateY(-50%);
+
+  background:
+    rgba(213,250,13,.16);
+
+}
+
+.password-toggle svg {
+
+  width:
+    20px;
+
+  height:
+    20px;
+
+  stroke:
+    currentColor;
+
+  stroke-width:
+    2;
+
+  fill:
+    none;
+
+}
+
+.password-toggle .eye-off {
+
+  display:
+    none;
+
+}
+
+.password-toggle.is-visible .eye {
+
+  display:
+    none;
+
+}
+
+.password-toggle.is-visible .eye-off {
+
+  display:
+    block;
+
+}
+
+
+button {
+
+  width:
+    100%;
+
+  border:
+    1px solid
+    transparent;
+
+  border-radius:
+    10px;
+
+  padding:
+    15px;
+
+  margin-top:
+    12px;
+
+  font-size:
+    15px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+  letter-spacing:
+    .5px;
+
+  text-transform:
+    uppercase;
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    background .15s ease;
+
+}
+
+button:hover:not(:disabled) {
+
+  transform:
+    translateY(-1px);
+
+}
+
+
+.login-button {
+
+  background:
+    var(--elite-green);
+
+  color:
+    var(--elite-black);
+
+  box-shadow:
+    0 10px 28px
+    rgba(213,250,13,.22);
+
+}
+
+
+.checkin-button {
+
+  background:
+    var(--elite-green);
+
+  color:
+    var(--elite-black);
+
+  box-shadow:
+    0 10px 28px
+    rgba(213,250,13,.22);
+
+}
+
+
+.secondary-button {
+
+  background:
+    transparent;
+
+  color:
+    var(--elite-green);
+
+  border-color:
+    rgba(213,250,13,.38);
+
+}
+
+
+button:disabled {
+
+  opacity:
+    .6;
+
+  cursor:
+    not-allowed;
+
+}
+
+
+.message {
+
+  display:
+    none;
+
+  margin-top:
+    15px;
+
+  padding:
+    13px;
+
+  border-radius:
+    10px;
+
+  text-align:
+    center;
+
+  font-size:
+    14px;
+
+}
+
+
+.success {
+
+  display:
+    block;
+
+  background:
+    rgba(213,250,13,.12);
+
+  color:
+    var(--elite-green);
+
+  border:
+    1px solid
+    rgba(213,250,13,.28);
+
+}
+
+
+.error {
+
+  display:
+    block;
+
+  background:
+    rgba(255,64,64,.12);
+
+  color:
+    #ff6b6b;
+
+  border:
+    1px solid
+    rgba(255,64,64,.26);
+
+}
+
+
+.camera-reminder {
+
+  display:
+    none;
+
+  margin-top:
+    15px;
+
+  padding:
+    14px;
+
+  border:
+    1px solid
+    rgba(213,250,13,.32);
+
+  border-radius:
+    12px;
+
+  background:
+    rgba(213,250,13,.1);
+
+  color:
+    white;
+
+  font-size:
+    13px;
+
+  line-height:
+    1.45;
+
+}
+
+.camera-reminder.is-visible {
+
+  display:
+    block;
+
+}
+
+.camera-reminder strong {
+
+  display:
+    block;
+
+  margin-bottom:
+    3px;
+
+  color:
+    var(--elite-green);
+
+  font-size:
+    14px;
+
+}
+
+
+#scannerScreen {
+
+  display:
+    none;
+
+}
+
+
+#reader {
+
+  display:
+    none;
+
+  width:
+    100%;
+
+  margin-top:
+    0;
+
+  border-radius:
+    18px;
+
+  overflow:
+    hidden;
+
+  position:
+    relative;
+
+  padding:
+    0;
+
+  background:
+    transparent;
+
+  border:
+    0;
+
+  box-shadow:
+    none;
+
+  min-height:
+    0;
+
+}
+
+#reader.scanner-active {
+
+  display:
+    block;
+
+  margin-top:
+    15px;
+
+  padding:
+    12px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(213,250,13,.08),
+      rgba(213,250,13,.02)
+    );
+
+  border:
+    2px solid
+    var(--elite-green);
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(0,0,0,.9),
+    0 0 0 5px
+    rgba(213,250,13,.08),
+    0 0 34px
+    rgba(213,250,13,.22);
+
+}
+
+#reader.scanner-active::before,
+#reader.scanner-active::after {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  width:
+    42px;
+
+  height:
+    42px;
+
+  pointer-events:
+    none;
+
+  z-index:
+    2;
+
+}
+
+#reader.scanner-active::before {
+
+  top:
+    8px;
+
+  left:
+    8px;
+
+  border-top:
+    4px solid
+    var(--elite-green);
+
+  border-left:
+    4px solid
+    var(--elite-green);
+
+  border-radius:
+    10px 0 0 0;
+
+}
+
+#reader.scanner-active::after {
+
+  right:
+    8px;
+
+  bottom:
+    8px;
+
+  border-right:
+    4px solid
+    var(--elite-green);
+
+  border-bottom:
+    4px solid
+    var(--elite-green);
+
+  border-radius:
+    0 0 10px 0;
+
+}
+
+#reader video,
+#reader canvas {
+
+  border-radius:
+    12px;
+
+}
+
+#reader button {
+
+  background:
+    var(--elite-green);
+
+  color:
+    var(--elite-black);
+
+}
+
+
+#founderCard {
+
+  display:
+    none;
+
+  margin-top:
+    20px;
+
+  padding:
+    22px;
+
+  background:
+    var(--panel-soft);
+
+  border:
+    1px solid
+    rgba(213,250,13,.26);
+
+  border-radius:
+    12px;
+
+  text-align:
+    center;
+
+}
+
+
+.founder-name {
+
+  font-size:
+    22px;
+
+  font-weight:
+    bold;
+
+  color:
+    white;
+
+}
+
+
+.founder-id {
+
+  margin-top:
+    8px;
+
+  color:
+    var(--elite-green);
+
+  font-size:
+    13px;
+
+  letter-spacing:
+    2px;
+
+}
+
+
+.status {
+
+  margin-top:
+    15px;
+
+  font-size:
+    13px;
+
+}
+
+
+.logout {
+
+  margin-top:
+    20px;
+
+  text-align:
+    center;
+
+  font-size:
+    12px;
+
+  color:
+    var(--muted-text);
+
+  cursor:
+    pointer;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<div class="card">
+
+
+<!-- =========================================
+     LOGIN
+========================================= -->
+
+<div id="loginScreen">
+
+
+  <div class="header">
+
+    <div class="logo-text">
+      THE ELITE SHOW
+    </div>
+
+    <h1>
+      The Elite Brew
+    </h1>
+
+    <div class="subtitle">
+      Event Check-in
+    </div>
+
+  </div>
+
+
+  <div class="password-field">
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Check-in password"
+      autocomplete="current-password"
+    >
+
+    <button
+      id="passwordToggle"
+      class="password-toggle"
+      type="button"
+      aria-label="Show password"
+      onclick="togglePassword()"
+    >
+
+      <svg
+        class="eye"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+
+      <svg
+        class="eye-off"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M3 3l18 18"></path>
+        <path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 2.1-.9"></path>
+        <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a17.9 17.9 0 0 1-3.1 4.2"></path>
+        <path d="M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7a10.5 10.5 0 0 0 5.4-1.5"></path>
+      </svg>
+
+    </button>
+
+  </div>
+
+
+  <button
+    id="loginButton"
+    class="login-button"
+    onclick="login()"
+  >
+
+    LOGIN
+
+  </button>
+
+
+  <div
+    id="loginMessage"
+    class="message">
+  </div>
+
+
+</div>
+
+
+
+<!-- =========================================
+     SCANNER
+========================================= -->
+
+<div id="scannerScreen">
+
+
+  <div class="header">
+
+    <div class="logo-text">
+      THE ELITE SHOW
+    </div>
+
+    <h1>
+      Check-in
+    </h1>
+
+    <div class="subtitle">
+      Scan the founder's QR
+    </div>
+
+  </div>
+
+
+  <div
+    id="cameraReminder"
+    class="camera-reminder"
+    role="status"
+  >
+
+    <strong>
+      Allow camera access
+    </strong>
+
+    Please tap Allow in the browser prompt so the QR scanner can open.
+
+  </div>
+
+
+  <div id="reader"></div>
+
+
+  <div
+    id="scanMessage"
+    class="message">
+  </div>
+
+
+  <!-- FOUNDER -->
+
+  <div id="founderCard">
+
+
+    <div
+      id="founderName"
+      class="founder-name">
+    </div>
+
+
+    <div
+      id="founderId"
+      class="founder-id">
+    </div>
+
+
+    <div
+      id="founderStatus"
+      class="status">
+    </div>
+
+
+    <button
+      id="checkinButton"
+      class="checkin-button"
+      onclick="checkIn()"
+    >
+
+      CHECK IN ✓
+
+    </button>
+
+
+    <button
+      class="secondary-button"
+      onclick="scanNext()"
+    >
+
+      SCAN NEXT
+
+    </button>
+
+
+  </div>
+
+
+  <div
+    class="logout"
+    onclick="logout()"
+  >
+
+    Log out
+
+  </div>
+
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+/****************************************************
+ * CONFIGURATION
+ ****************************************************/
+
+
+/*
+ * PASTE YOUR APPS SCRIPT WEB APP URL HERE.
+ */
+
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzM5db-84ITH3tEwajmrjN8cZ1XaDOKBaMl4_oy3mxQWhJIusz59F7W8FcNFQuRa3Nq/exec";
+
+
+/****************************************************
+ * VARIABLES
+ ****************************************************/
+
+
+let token =
+  null;
+
+
+let currentFounderId =
+  null;
+
+
+let scanner =
+  null;
+
+
+let scannerRunning =
+  false;
+
+
+let requestNumber =
+  0;
+
+
+/****************************************************
+ * PASSWORD VISIBILITY
+ ****************************************************/
+
+function togglePassword() {
+
+
+  const passwordInput =
+    document
+      .getElementById(
+        "password"
+      );
+
+
+  const toggleButton =
+    document
+      .getElementById(
+        "passwordToggle"
+      );
+
+
+  const isHidden =
+    passwordInput.type ===
+    "password";
+
+
+  passwordInput.type =
+    isHidden ?
+      "text" :
+      "password";
+
+
+  toggleButton.classList.toggle(
+    "is-visible",
+    isHidden
+  );
+
+
+  toggleButton.setAttribute(
+    "aria-label",
+    isHidden ?
+      "Hide password" :
+      "Show password"
+  );
+
+
+  passwordInput.focus();
+
+}
+
+
+/****************************************************
+ * CAMERA REMINDER
+ ****************************************************/
+
+function showCameraReminder() {
+
+
+  document
+    .getElementById(
+      "cameraReminder"
+    )
+    .classList
+    .add(
+      "is-visible"
+    );
+
+}
+
+
+function hideCameraReminder() {
+
+
+  document
+    .getElementById(
+      "cameraReminder"
+    )
+    .classList
+    .remove(
+      "is-visible"
+    );
+
+}
+
+
+/****************************************************
+ * LOGIN
+ ****************************************************/
+
+function login() {
+
+
+  const password =
+    document
+      .getElementById("password")
+      .value
+      .trim();
+
+
+  if (!password) {
+
+    showMessage(
+      "loginMessage",
+      "Please enter the password.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document
+      .getElementById(
+        "loginButton"
+      );
+
+
+  button.disabled =
+    true;
+
+  button.innerText =
+    "LOGGING IN...";
+
+
+  apiRequest(
+
+    "login",
+
+    {
+      password:
+        password
+    },
+
+    function(result) {
+
+
+      button.disabled =
+        false;
+
+      button.innerText =
+        "LOGIN";
+
+
+      if (!result.success) {
+
+        showMessage(
+          "loginMessage",
+          result.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      /*
+       * Store temporary token.
+       */
+
+      token =
+        result.token;
+
+
+      /*
+       * Hide login.
+       */
+
+      document
+        .getElementById(
+          "loginScreen"
+        )
+        .style.display =
+        "none";
+
+
+      /*
+       * Show scanner.
+       */
+
+      document
+        .getElementById(
+          "scannerScreen"
+        )
+        .style.display =
+        "block";
+
+
+      /*
+       * Start camera.
+       */
+
+      startScanner();
+
+    }
+
+  );
+
+}
+
+
+/****************************************************
+ * START QR SCANNER
+ ****************************************************/
+
+function startScanner() {
+
+
+  if (scannerRunning) {
+    return;
+  }
+
+
+  showCameraReminder();
+
+
+  document
+    .getElementById(
+      "reader"
+    )
+    .classList
+    .add(
+      "scanner-active"
+    );
+
+
+  scanner =
+    new Html5Qrcode(
+      "reader"
+    );
+
+
+  scanner
+
+    .start(
+
+      {
+        facingMode:
+          "environment"
+      },
+
+      {
+        fps:
+          10,
+
+        qrbox:
+        {
+          width:
+            250,
+
+          height:
+            250
+        },
+
+        aspectRatio:
+          1
+
+      },
+
+      function(decodedText) {
+
+
+        /*
+         * QR contains:
+         *
+         * TEB-001
+         */
+
+        const founderId =
+          decodedText
+            .trim()
+            .toUpperCase();
+
+
+        /*
+         * Stop camera before
+         * looking up founder.
+         */
+
+        stopScanner();
+
+
+        currentFounderId =
+          founderId;
+
+
+        findFounder(
+          founderId
+        );
+
+      },
+
+      function(error) {
+
+        /*
+         * Normal scanner errors
+         * are ignored.
+         */
+
+      }
+
+    )
+
+    .then(
+      function() {
+
+        scannerRunning =
+          true;
+
+
+        hideCameraReminder();
+
+      }
+    )
+
+    .catch(
+      function(error) {
+
+        console.error(
+          error
+        );
+
+
+        showMessage(
+          "scanMessage",
+          "Camera could not be opened. Please allow camera access.",
+          "error"
+        );
+
+
+        showCameraReminder();
+
+
+        document
+          .getElementById(
+            "reader"
+          )
+          .classList
+          .remove(
+            "scanner-active"
+          );
+
+      }
+    );
+
+}
+
+
+/****************************************************
+ * FIND FOUNDER
+ ****************************************************/
+
+function findFounder(
+  founderId
+) {
+
+
+  showMessage(
+    "scanMessage",
+    "Checking registration...",
+    "success"
+  );
+
+
+  apiRequest(
+
+    "find",
+
+    {
+
+      token:
+        token,
+
+      id:
+        founderId
+
+    },
+
+    function(result) {
+
+
+      if (!result.success) {
+
+        showMessage(
+          "scanMessage",
+          result.message,
+          "error"
+        );
+
+
+        setTimeout(
+          scanNext,
+          1800
+        );
+
+
+        return;
+
+      }
+
+
+      /*
+       * Show founder card.
+       */
+
+      document
+        .getElementById(
+          "founderCard"
+        )
+        .style.display =
+        "block";
+
+
+      document
+        .getElementById(
+          "founderName"
+        )
+        .innerText =
+        result.name;
+
+
+      document
+        .getElementById(
+          "founderId"
+        )
+        .innerText =
+        result.founderId;
+
+
+      const status =
+        document
+          .getElementById(
+            "founderStatus"
+          );
+
+
+      const checkinButton =
+        document
+          .getElementById(
+            "checkinButton"
+          );
+
+
+      /*
+       * Already checked in.
+       */
+
+      if (
+        result.status ===
+        "Checked in"
+      ) {
+
+        status.innerText =
+          "✓ Already checked in";
+
+
+        status.style.color =
+          "#b42318";
+
+
+        checkinButton.style.display =
+          "none";
+
+
+        showMessage(
+          "scanMessage",
+          "This founder has already checked in.",
+          "error"
+        );
+
+      }
+
+      else {
+
+        status.innerText =
+          "Registration verified";
+
+
+        status.style.color =
+          "#d5fa0d";
+
+
+        checkinButton.style.display =
+          "block";
+
+
+        checkinButton.disabled =
+          false;
+
+
+        checkinButton.innerText =
+          "CHECK IN ✓";
+
+
+        showMessage(
+          "scanMessage",
+          "Registration found.",
+          "success"
+        );
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/****************************************************
+ * CHECK IN
+ ****************************************************/
+
+function checkIn() {
+
+
+  if (!currentFounderId) {
+    return;
+  }
+
+
+  const button =
+    document
+      .getElementById(
+        "checkinButton"
+      );
+
+
+  button.disabled =
+    true;
+
+
+  button.innerText =
+    "CHECKING IN...";
+
+
+  apiRequest(
+
+    "checkin",
+
+    {
+
+      token:
+        token,
+
+      id:
+        currentFounderId
+
+    },
+
+    function(result) {
+
+
+      if (!result.success) {
+
+
+        button.disabled =
+          false;
+
+
+        button.innerText =
+          "CHECK IN ✓";
+
+
+        if (
+          result.alreadyCheckedIn
+        ) {
+
+          showMessage(
+            "scanMessage",
+            "Already checked in.",
+            "error"
+          );
+
+        }
+
+        else {
+
+          showMessage(
+            "scanMessage",
+            result.message,
+            "error"
+          );
+
+        }
+
+
+        return;
+
+      }
+
+
+      /*
+       * Successful check-in.
+       */
+
+      button.innerText =
+        "CHECKED IN ✓";
+
+
+      button.disabled =
+        true;
+
+
+      document
+        .getElementById(
+          "founderStatus"
+        )
+        .innerText =
+        "✓ Checked in successfully";
+
+
+      document
+        .getElementById(
+          "founderStatus"
+        )
+        .style.color =
+        "#d5fa0d";
+
+
+      showMessage(
+        "scanMessage",
+        result.name +
+        " has been checked in!",
+        "success"
+      );
+
+    }
+
+  );
+
+}
+
+
+/****************************************************
+ * SCAN NEXT
+ ****************************************************/
+
+function scanNext() {
+
+
+  currentFounderId =
+    null;
+
+
+  document
+    .getElementById(
+      "founderCard"
+    )
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById(
+      "scanMessage"
+    )
+    .style.display =
+    "none";
+
+
+  const button =
+    document
+      .getElementById(
+        "checkinButton"
+      );
+
+
+  button.style.display =
+    "block";
+
+
+  button.disabled =
+    false;
+
+
+  button.innerText =
+    "CHECK IN ✓";
+
+
+  startScanner();
+
+}
+
+
+/****************************************************
+ * STOP SCANNER
+ ****************************************************/
+
+function stopScanner() {
+
+
+  hideCameraReminder();
+
+
+  document
+    .getElementById(
+      "reader"
+    )
+    .classList
+    .remove(
+      "scanner-active"
+    );
+
+
+  if (
+    scanner &&
+    scannerRunning
+  ) {
+
+    scanner
+      .stop()
+
+      .then(
+        function() {
+
+        scannerRunning =
+          false;
+
+
+          if (
+            scanner &&
+            scanner.clear
+          ) {
+
+            scanner.clear();
+
+          }
+
+        }
+      )
+
+      .catch(
+        function() {
+
+        scannerRunning =
+          false;
+
+
+          if (
+            scanner &&
+            scanner.clear
+          ) {
+
+            scanner.clear();
+
+          }
+
+        }
+      );
+
+  }
+
+}
+
+
+/****************************************************
+ * LOGOUT
+ ****************************************************/
+
+function logout() {
+
+
+  stopScanner();
+
+
+  token =
+    null;
+
+
+  currentFounderId =
+    null;
+
+
+  document
+    .getElementById(
+      "scannerScreen"
+    )
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .style.display =
+    "block";
+
+
+  document
+    .getElementById(
+      "password"
+    )
+    .value =
+    "";
+
+
+  document
+    .getElementById(
+      "password"
+    )
+    .type =
+    "password";
+
+
+  document
+    .getElementById(
+      "passwordToggle"
+    )
+    .classList
+    .remove(
+      "is-visible"
+    );
+
+
+  document
+    .getElementById(
+      "passwordToggle"
+    )
+    .setAttribute(
+      "aria-label",
+      "Show password"
+    );
+
+
+}
+
+
+/****************************************************
+ * API REQUEST
+ *
+ * Uses JSONP so the normal HTML site can
+ * communicate with Apps Script.
+ ****************************************************/
+
+function apiRequest(
+  action,
+  params,
+  callback
+) {
+
+
+  requestNumber++;
+
+
+  const callbackName =
+    "eliteBrewCallback_" +
+    requestNumber;
+
+
+  window[callbackName] =
+    function(result) {
+
+
+      /*
+       * Remove callback.
+       */
+
+      delete window[
+        callbackName
+      ];
+
+
+      if (
+        script.parentNode
+      ) {
+
+        script.parentNode
+          .removeChild(
+            script
+          );
+
+      }
+
+
+      callback(
+        result
+      );
+
+    };
+
+
+  const query =
+    new URLSearchParams();
+
+
+  query.set(
+    "action",
+    action
+  );
+
+
+  query.set(
+    "callback",
+    callbackName
+  );
+
+
+  Object.keys(
+    params || {}
+  ).forEach(
+    function(key) {
+
+      query.set(
+        key,
+        params[key]
+      );
+
+    }
+  );
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    APPS_SCRIPT_URL +
+    "?" +
+    query.toString();
+
+
+  script.onerror =
+    function() {
+
+
+      delete window[
+        callbackName
+      ];
+
+
+      if (
+        script.parentNode
+      ) {
+
+        script.parentNode
+          .removeChild(
+            script
+          );
+
+      }
+
+
+      callback({
+
+        success:
+          false,
+
+        message:
+          "Could not connect to the check-in server."
+
+      });
+
+    };
+
+
+  document
+    .body
+    .appendChild(
+      script
+    );
+
+}
+
+
+/****************************************************
+ * MESSAGE
+ ****************************************************/
+
+function showMessage(
+  elementId,
+  text,
+  type
+) {
+
+
+  const element =
+    document
+      .getElementById(
+        elementId
+      );
+
+
+  element.innerText =
+    text;
+
+
+  element.className =
+    "message " +
+    type;
+
+}
+
+
+document
+  .getElementById(
+    "password"
+  )
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key ===
+        "Enter"
+      ) {
+
+        login();
+
+      }
+
+    }
+  );
+
+</script>
+
+
+</body>
+
+</html>

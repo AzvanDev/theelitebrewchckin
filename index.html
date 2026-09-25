@@ -17,7 +17,8 @@
 <!-- QR SCANNER -->
 
 <script
-  src="https://unpkg.com/html5-qrcode"
+  src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"
+  onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js';"
   type="text/javascript">
 </script>
 
@@ -948,7 +949,7 @@ button:disabled {
       Allow camera access
     </strong>
 
-    Please tap Allow in the browser prompt so the QR scanner can open.
+    Tap Allow in the browser prompt. If you denied it earlier, enable Camera in this site's browser settings and refresh.
 
   </div>
 
@@ -1065,6 +1066,14 @@ let scannerRunning =
   false;
 
 
+let scannerStopping =
+  null;
+
+
+let scannerStartQueued =
+  false;
+
+
 let requestNumber =
   0;
 
@@ -1150,6 +1159,85 @@ function hideCameraReminder() {
     .remove(
       "is-visible"
     );
+
+}
+
+
+/****************************************************
+ * CAMERA SUPPORT
+ ****************************************************/
+
+function isLocalHost() {
+
+
+  return [
+    "localhost",
+    "127.0.0.1",
+    "::1"
+  ].includes(
+    window.location.hostname
+  );
+
+}
+
+
+function canUseCameraHere() {
+
+
+  if (
+    window.location.protocol !==
+      "https:" &&
+    !isLocalHost()
+  ) {
+
+    return {
+      success:
+        false,
+
+      message:
+        "Camera access needs HTTPS. Please open the Vercel website link on mobile."
+    };
+
+  }
+
+
+  if (
+    typeof Html5Qrcode ===
+    "undefined"
+  ) {
+
+    return {
+      success:
+        false,
+
+      message:
+        "QR scanner could not load. Please refresh the page and check internet access."
+    };
+
+  }
+
+
+  if (
+    !window.navigator ||
+    !window.navigator.mediaDevices ||
+    !window.navigator.mediaDevices.getUserMedia
+  ) {
+
+    return {
+      success:
+        false,
+
+      message:
+        "This browser does not support camera scanning. Please use Chrome or Safari on mobile."
+    };
+
+  }
+
+
+  return {
+    success:
+      true
+  };
 
 }
 
@@ -1281,6 +1369,52 @@ function startScanner() {
 
   if (scannerRunning) {
     return;
+  }
+
+
+  if (scannerStopping) {
+
+    if (!scannerStartQueued) {
+
+      scannerStartQueued =
+        true;
+
+
+      scannerStopping.then(
+        function() {
+
+          scannerStartQueued =
+            false;
+
+
+          startScanner();
+
+        }
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  const cameraSupport =
+    canUseCameraHere();
+
+
+  if (!cameraSupport.success) {
+
+    showMessage(
+      "scanMessage",
+      cameraSupport.message,
+      "error"
+    );
+
+    showCameraReminder();
+
+    return;
+
   }
 
 
@@ -1781,14 +1915,15 @@ function stopScanner() {
     scannerRunning
   ) {
 
-    scanner
+    scannerStopping =
+      scanner
       .stop()
 
       .then(
         function() {
 
-        scannerRunning =
-          false;
+          scannerRunning =
+            false;
 
 
           if (
@@ -1806,8 +1941,8 @@ function stopScanner() {
       .catch(
         function() {
 
-        scannerRunning =
-          false;
+          scannerRunning =
+            false;
 
 
           if (
@@ -1818,6 +1953,15 @@ function stopScanner() {
             scanner.clear();
 
           }
+
+        }
+      )
+
+      .finally(
+        function() {
+
+          scannerStopping =
+            null;
 
         }
       );
